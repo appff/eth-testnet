@@ -2,10 +2,13 @@
     "config": {
         "chainId": 5465,
         "homesteadBlock":0,
+        "byzantiumBlock": 0,
+        "constantinopleBlock": 0,
+        "petersburgBlock": 0,
         "eip150Block":0,
-        "eip155Block":10,
-        "eip158Block":10,
-        "eip160Block":10
+        "eip155Block":0,
+        "eip158Block":0,
+        "eip160Block":0
     },
     "nonce": "0x0012231231123042",
     "alloc": {
