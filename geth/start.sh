@@ -9,21 +9,21 @@ geth init genesis.json
 # Enable the miner API if required, min gasprice = 0
 API="--rpcapi personal,eth,net,web3,txpool,admin"
 if [[ "$MINER" == 1 ]]; then
-    MINE="--mine --minerthreads=1 --etherbase=0xd912aecb07e9f4e1ea8e6b4779e7fb6aa1c3e4d8 --gasprice 0"
+    MINE="--mine --miner.threads=1 --miner.etherbase=0xd912aecb07e9f4e1ea8e6b4779e7fb6aa1c3e4d8 --miner.gasprice 0"
     API+=",miner"
-else 
+else
     MINE=""
 fi
 
-# We assume there's either a `bootnode.key` or 
+# We assume there's either a `bootnode.key` or
 # `bootnode.pubkey` file at /root depending on if
-# the node is the bootnode or a node connecting to 
+# the node is the bootnode or a node connecting to
 # the bootnode
 BOOTNODE_CMD=""
 if [[ "$BOOTNODE" == 1 ]]; then
     BOOTNODE_CMD="--nodekey /root/boot.key"
     echo "Launching bootnode" $BOOTNODE_CMD
-else 
+else
     # Get the bootnode's IP and enode and use it
     BOOTNODE_IP=`host bootnode | cut -d" " -f4`
     ENODE=`cat /root/boot.pubkey`
