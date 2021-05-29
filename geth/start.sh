@@ -7,7 +7,7 @@ cd /root
 geth init genesis.json
 
 # Enable the miner API if required, min gasprice = 0
-API="--rpcapi personal,eth,net,web3,txpool,admin"
+API="--rpcapi db,personal,eth,net,web3,txpool,admin"
 if [[ "$MINER" == 1 ]]; then
     MINE="--mine --miner.threads=1 --miner.etherbase=0xd912aecb07e9f4e1ea8e6b4779e7fb6aa1c3e4d8 --miner.gasprice 0"
     API+=",miner"

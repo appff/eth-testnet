@@ -37,7 +37,7 @@ services:
         scale: 1
         build:
             context: ./geth
-            dockerfile: geth.dockerfile
+            dockerfile: mev_geth.dockerfile
         # keep it always up so nodes can connect to each other
         restart: always
         # name it for easy discovery by other nodes
@@ -63,14 +63,11 @@ services:
     ##########################
     # Nodes                  #
     ##########################
-
     geth:
         build:
             context: ./geth
             dockerfile: geth.dockerfile
-        scale: 4
-        # keep it always up so nodes can connect to each other
-        restart: always
+        scale: 1
         links:
             - "bootnode"
         environment:
@@ -86,37 +83,33 @@ services:
     ##########################
 
     # A miner is just a geth with env MINER=1
-    # geth_miner:
-    #     # We have to run a few miners in order to work around:
-    #     # - https://github.com/ethereum/go-ethereum/issues/2769
-    #     # - https://github.com/ethereum/go-ethereum/issues/3694
-    #     scale: 2
-    #     # keep it always up so nodes can connect to each other
-    #     restart: always
-    #     build:
-    #         context: ./geth
-    #         dockerfile: geth.dockerfile
-    #     links:
-    #         - "bootnode"
-    #     networks:
-    #         - testnet
-    #     volumes:
-    #         - ./bootnode/boot.pubkey:/root/boot.pubkey
-    #         # The miner must have the keystore mounted
-    #         # for the etherbase
-    #         - ./keys/:/root/.ethereum/keystore:rw
-    #     environment:
-    #         MINER: 1
-    #     ports:
-    #         # Expose the miners to the host's 7545 and 7546 ports
-    #         - 7545-7546:8545
+    geth_miner:
+        # We have to run a few miners in order to work around:
+        # - https://github.com/ethereum/go-ethereum/issues/2769
+        # - https://github.com/ethereum/go-ethereum/issues/3694
+        scale: 2
+        build:
+            context: ./geth
+            dockerfile: mev_geth.dockerfile
+        links:
+            - "bootnode"
+        networks:
+            - testnet
+        volumes:
+            - ./bootnode/boot.pubkey:/root/boot.pubkey
+            # The miner must have the keystore mounted
+            # for the etherbase
+            - ./keys/:/root/.ethereum/keystore:rw
+        environment:
+            MINER: 1
+        ports:
+            # Expose the miners to the host's 7545 and 7546 ports
+            - 7545-7546:8545
 
     # The MEV Geth miner exposes the mev bundle APIs
     # under `eth_sendBundle`
     mev_geth_miner:
         scale: 1
-        # keep it always up so nodes can connect to each other
-        restart: always
         build:
             context: ./geth
             dockerfile: mev_geth.dockerfile
