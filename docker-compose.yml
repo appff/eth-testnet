@@ -24,7 +24,8 @@ services:
             - testnet
         depends_on:
             - bootnode
-            - geth
+            - geth_miner
+            - mev_geth_miner
 
     ##########################
     # Bootnode               #
@@ -90,7 +91,7 @@ services:
         scale: 2
         build:
             context: ./geth
-            dockerfile: mev_geth.dockerfile
+            dockerfile: geth.dockerfile
         links:
             - "bootnode"
         networks:
@@ -113,8 +114,8 @@ services:
         build:
             context: ./geth
             dockerfile: mev_geth.dockerfile
-        links:
-            - "bootnode"
+        # links:
+            # - "bootnode"
         networks:
             - testnet
         volumes:
@@ -124,6 +125,7 @@ services:
             - ./keys/:/root/.ethereum/keystore:rw
         environment:
             MINER: 1
+            BOOTNODE: 1
         # Expose MEV Geth at 9545 on the host
         ports:
             - 9545:8545

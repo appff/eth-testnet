@@ -43,4 +43,4 @@ geth \
     --nousb \
     $API \
     $MINE \
-    $BOOTNODE_CMD
+    # $BOOTNODE_CMD
